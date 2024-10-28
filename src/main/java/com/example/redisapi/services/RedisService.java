@@ -32,4 +32,9 @@ public class RedisService {
         Long count = value != null ? Long.parseLong(value) : 0;
         return new RedisEntity(count);
     }
+
+    public RedisEntity reset() {
+        redisTemplate.opsForValue().set(USER_COUNTER_KEY, "0");
+        return new RedisEntity(Long.parseLong("0"));
+    }
 }

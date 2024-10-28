@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/redis")
+@RequestMapping("/contador")
 public class RedisController {
 
     @Autowired
@@ -21,7 +21,7 @@ public class RedisController {
             @ApiResponse(responseCode = "200", description = "Contador incrementado com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao incrementar o contador")
     })
-    @GetMapping("/incr")
+    @PostMapping("/incr")
     public RedisEntity incrementUserCounter() {
         return redisService.increment();
     }
@@ -32,7 +32,7 @@ public class RedisController {
             @ApiResponse(responseCode = "406", description = "O contador já está em 0 e não pode ser decrementado"),
             @ApiResponse(responseCode = "500", description = "Erro ao decrementar o contador")
     })
-    @GetMapping("/decr")
+    @PostMapping("/decr")
     public ResponseEntity<?> decrementUserCounter() {
         RedisEntity retorno = redisService.decrement();
 
@@ -53,4 +53,14 @@ public class RedisController {
         return redisService.get();
     }
 
+
+    @Operation(summary = "Limpa o valor do contador do usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Valor do contador limpo com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro ao obter o valor do contador")
+    })
+    @DeleteMapping("/reset")
+    public ResponseEntity<?> clearUserCounter() {
+        return ResponseEntity.ok(redisService.reset());
+    }
 }
